@@ -6,6 +6,7 @@
 @prefix primitive_data_types---common_primitive_types_classes_and_enumerations: <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/primitive_data_types---common_primitive_types_classes_and_enumerations#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix sp: <http://spinrdf.org/sp#> .
 @prefix spin: <http://spinrdf.org/spin#> .
 @prefix swa: <http://topbraid.org/swa#> .
@@ -51,77 +52,53 @@ composition associations from EnergyRouter to RouterConnectionPoint. """ ;
   owl:imports <http://sgt.6/20160614/component-collection-all> ;
   owl:versionInfo "Created with TopBraid Composer" ;
 .
-<http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/device---device_and_model_components#ComponentElement>
-  rdfs:subClassOf [
-      a owl:Restriction ;
-      owl:allValuesFrom <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/device---device_and_model_components#Device> ;
-      owl:onProperty <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/other_common_classes---common_primitive_types_classes_and_enumerations#hasPartOfRef> ;
-    ] ;
-.
-<http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/energy_measurements---measurements#EnergyMeasurementsSet>
-  rdfs:subClassOf [
-      a owl:Restriction ;
-      owl:cardinality "1"^^xsd:nonNegativeInteger ;
-      owl:onProperty <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/energy_measurements---measurements#hasQuantityReactiveEnergyRef> ;
-    ] ;
-  rdfs:subClassOf [
-      a owl:Restriction ;
-      owl:cardinality "1"^^xsd:nonNegativeInteger ;
-      owl:onProperty <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/energy_measurements---measurements#hasQuantityRealEnergyRef> ;
-    ] ;
-.
 <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/energyrouter---energy_manager_component#EnergyRouter>
-  rdfs:subClassOf [
-      a owl:Restriction ;
-      owl:allValuesFrom <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/energy_manager_component---device_and_model_components#EM> ;
-      owl:onProperty <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/other_common_classes---common_primitive_types_classes_and_enumerations#hasPartOfRef> ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/energyrouter---energy_manager_component#hasConnection0Ref> ;
+      sh:class <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/energyrouter---energy_manager_component#RouterConnectionPoint> ;
+      sh:maxCount 1 ;
+      sh:minCount 1 ;
+      sh:name "has connection0Ref" ;
+      sh:nodeKind sh:IRI ;
     ] ;
-  rdfs:subClassOf [
-      a owl:Restriction ;
-      owl:allValuesFrom <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/energyrouter---energy_manager_component#RouterConnectionPoint> ;
-      owl:onProperty <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/energyrouter---energy_manager_component#hasConnection0Ref> ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/energyrouter---energy_manager_component#hasConnection1Ref> ;
+      sh:class <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/energyrouter---energy_manager_component#RouterConnectionPoint> ;
+      sh:maxCount 1 ;
+      sh:minCount 1 ;
+      sh:name "has connection1Ref" ;
+      sh:nodeKind sh:IRI ;
     ] ;
-  rdfs:subClassOf [
-      a owl:Restriction ;
-      owl:allValuesFrom <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/energyrouter---energy_manager_component#RouterConnectionPoint> ;
-      owl:onProperty <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/energyrouter---energy_manager_component#hasConnection1Ref> ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/energyrouter---energy_manager_component#hasConnection2Ref> ;
+      sh:class <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/energyrouter---energy_manager_component#RouterConnectionPoint> ;
+      sh:maxCount 1 ;
+      sh:minCount 1 ;
+      sh:name "has connection2Ref" ;
+      sh:nodeKind sh:IRI ;
     ] ;
-  rdfs:subClassOf [
-      a owl:Restriction ;
-      owl:allValuesFrom <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/energyrouter---energy_manager_component#RouterConnectionPoint> ;
-      owl:onProperty <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/energyrouter---energy_manager_component#hasConnection2Ref> ;
-    ] ;
-  rdfs:subClassOf [
-      a owl:Restriction ;
-      owl:cardinality "1"^^xsd:nonNegativeInteger ;
-      owl:onProperty <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/energyrouter---energy_manager_component#hasConnection0Ref> ;
-    ] ;
-  rdfs:subClassOf [
-      a owl:Restriction ;
-      owl:cardinality "1"^^xsd:nonNegativeInteger ;
-      owl:onProperty <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/energyrouter---energy_manager_component#hasConnection1Ref> ;
-    ] ;
-  rdfs:subClassOf [
-      a owl:Restriction ;
-      owl:cardinality "1"^^xsd:nonNegativeInteger ;
-      owl:onProperty <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/energyrouter---energy_manager_component#hasConnection2Ref> ;
-    ] ;
-  rdfs:subClassOf [
-      a owl:Restriction ;
-      owl:cardinality "1"^^xsd:nonNegativeInteger ;
-      owl:onProperty <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/other_common_classes---common_primitive_types_classes_and_enumerations#hasPartOfRef> ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/other_common_classes---common_primitive_types_classes_and_enumerations#hasPartOfRef> ;
+      sh:class <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/energy_manager_component---device_and_model_components#EM> ;
+      sh:maxCount 1 ;
+      sh:minCount 1 ;
+      sh:name "has part of ref" ;
+      sh:nodeKind sh:IRI ;
     ] ;
 .
 <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/energyrouter---energy_manager_component#RouterConnectionPoint>
-  rdfs:subClassOf [
-      a owl:Restriction ;
-      owl:allValuesFrom <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/energyrouter---energy_manager_component#EnergyRouter> ;
-      owl:onProperty <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/other_common_classes---common_primitive_types_classes_and_enumerations#hasPartOfRef> ;
-    ] ;
-  rdfs:subClassOf [
-      a owl:Restriction ;
-      owl:cardinality "1"^^xsd:nonNegativeInteger ;
-      owl:onProperty <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/other_common_classes---common_primitive_types_classes_and_enumerations#hasPartOfRef> ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/other_common_classes---common_primitive_types_classes_and_enumerations#hasPartOfRef> ;
+      sh:class <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/energyrouter---energy_manager_component#EnergyRouter> ;
+      sh:maxCount 1 ;
+      sh:minCount 1 ;
+      sh:name "has part of ref" ;
+      sh:nodeKind sh:IRI ;
     ] ;
 .
 <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/energyrouter---energy_manager_component#hasConnection0Ref>
@@ -139,54 +116,37 @@ composition associations from EnergyRouter to RouterConnectionPoint. """ ;
   <http://uml.topquadrant.com/owl/uml/smg/uml2owl#belongsToGeneratedPackage> <http://topbraid.org/temp#Documentr-1-0-0-21-76> ;
   rdfs:label "connection" ;
 .
-<http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/generator_component---device_and_model_components#Generator>
-  rdfs:subClassOf [
-      a owl:Restriction ;
-      owl:cardinality "1"^^xsd:nonNegativeInteger ;
-      owl:onProperty <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/generator_component---device_and_model_components#hasOutputRef> ;
-    ] ;
+<http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/generator_component---device_and_model_components#Generator-generator_component---device_and_model_components_hasOutputRef>
+  sh:maxCount 1 ;
+  sh:minCount 1 ;
 .
-<http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/load_component---device_and_model_components#Load>
-  rdfs:subClassOf [
-      a owl:Restriction ;
-      owl:cardinality "1"^^xsd:nonNegativeInteger ;
-      owl:onProperty <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/load_component---device_and_model_components#hasInputRef> ;
-    ] ;
+<http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/load_component---device_and_model_components#Load-load_component---device_and_model_components_hasInputRef>
+  sh:maxCount 1 ;
+  sh:minCount 1 ;
 .
-<http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/measurements---common_primitive_types_classes_and_enumerations#Measurement>
-  rdfs:subClassOf [
-      a owl:Restriction ;
-      owl:cardinality "1"^^xsd:nonNegativeInteger ;
-      owl:onProperty <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/energy_manager_component---device_and_model_components#hasMeasuredAtRef> ;
-    ] ;
+<http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/measurements---common_primitive_types_classes_and_enumerations#Measurement-energy_manager_component---device_and_model_components_hasMeasuredAtRef>
+  sh:maxCount 1 ;
+  sh:minCount 1 ;
 .
-<http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/meter_component---device_and_model_components#ElectricMeter>
-  rdfs:subClassOf [
-      a owl:Restriction ;
-      owl:cardinality "1"^^xsd:nonNegativeInteger ;
-      owl:onProperty <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/meter_component---device_and_model_components#hasInputRef> ;
-    ] ;
-  rdfs:subClassOf [
-      a owl:Restriction ;
-      owl:cardinality "1"^^xsd:nonNegativeInteger ;
-      owl:onProperty <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/meter_component---device_and_model_components#hasOutputRef> ;
-    ] ;
+<http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/meter_component---device_and_model_components#ElectricMeter-meter_component---device_and_model_components_hasInputRef>
+  sh:maxCount 1 ;
+  sh:minCount 1 ;
+.
+<http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/meter_component---device_and_model_components#ElectricMeter-meter_component---device_and_model_components_hasOutputRef>
+  sh:maxCount 1 ;
+  sh:minCount 1 ;
 .
 <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/other_common_classes---common_primitive_types_classes_and_enumerations#hasPartOfRef>
   a owl:ObjectProperty ;
   rdfs:label "hasPartOfRef" ;
 .
-<http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/power_measurements---measurements#PowerMeasurementsSet>
-  rdfs:subClassOf [
-      a owl:Restriction ;
-      owl:cardinality "1"^^xsd:nonNegativeInteger ;
-      owl:onProperty <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/power_measurements---measurements#hasQuantityReactivePowerRef> ;
-    ] ;
-  rdfs:subClassOf [
-      a owl:Restriction ;
-      owl:cardinality "1"^^xsd:nonNegativeInteger ;
-      owl:onProperty <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/power_measurements---measurements#hasQuantityRealPowerRef> ;
-    ] ;
+<http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/power_measurements---measurements#PowerMeasurementsSet-power_measurements---measurements_hasQuantityReactivePowerRef>
+  sh:maxCount 1 ;
+  sh:minCount 1 ;
+.
+<http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/power_measurements---measurements#PowerMeasurementsSet-power_measurements---measurements_hasQuantityRealPowerRef>
+  sh:maxCount 1 ;
+  sh:minCount 1 ;
 .
 primitive_data_types---common_primitive_types_classes_and_enumerations:false
   a primitive_data_types---common_primitive_types_classes_and_enumerations:Boolean ;

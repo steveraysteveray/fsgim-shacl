@@ -1,4 +1,4 @@
-# baseURI: http://sgt.6/20160614/component-collection-all
+# baseURI: http://fsgim
 # imports: http://datashapes.org/dash
 
 @prefix afn: <http://jena.hpl.hp.com/ARQ/function#> .
@@ -110,8 +110,10 @@
 @prefix sp: <http://spinrdf.org/sp#> .
 @prefix spin: <http://spinrdf.org/spin#> .
 @prefix standard_aggregations---collections_rulesets_and_aggregations: <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/standard_aggregations---collections_rulesets_and_aggregations#> .
+@prefix swa: <http://topbraid.org/swa#> .
 @prefix swe---wxxm: <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/swe---wxxm#> .
 @prefix time---common_primitive_types_classes_and_enumerations: <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/time---common_primitive_types_classes_and_enumerations#> .
+@prefix tweaks: <http://sgt.6/tweaks#> .
 @prefix uml: <http://schema.omg.org/spec/UML/2.1/uml.xml#> .
 @prefix uml-extension: <http://schema.omg.org/spec/UML/2.1/uml-extension#> .
 @prefix under_consideration---common_primitive_types_classes_and_enumerations: <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/under_consideration---common_primitive_types_classes_and_enumerations#> .
@@ -131,6 +133,10 @@
 @prefix wxxm---model_elements_from_external_sources: <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/wxxm---model_elements_from_external_sources#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
+<http://fsgim>
+  a owl:Ontology ;
+  owl:imports <http://datashapes.org/dash> ;
+.
 <http://schema.omg.org/spec/UML/2.1/uml-extension>
   owl:versionInfo "Created with TopBraid Composer" ;
 .
@@ -148,9 +154,44 @@ uml:Package
   rdfs:subClassOf owl:Thing ;
 .
 <http://sgt.6/20160614/component-collection-all>
-  a owl:Ontology ;
   <http://datashapes.org/owl2shacl#createPropertyShapeURIsWithPrefixes> true ;
-  owl:imports <http://datashapes.org/dash> ;
+.
+<http://sgt.6/tweaks>
+  <http://datashapes.org/owl2shacl#createPropertyShapeURIsWithPrefixes> true ;
+  rdfs:comment """This file contains some \"tweaks' to address implementation requirements. They are summarized here:
+
+1. There is no explicitly modeled way to differentiate connection[0] from connection[1] or [2] in an
+EnergyRouter. Currently, the implicit way is by order of occurrence in an implementation array (i.e. [0], [1] and
+[2]). This assumes a particular implementation approach, namely an array with three elements. Such an
+implementation is not relevant in a conceptual model implementation, however, so a workaround is needed in
+implementations that do not use ordered arrays to store this information. The recommended convention is to
+explicitly model the [0], [1] and [2] connections as distinct. We defined three properties called Connection0,
+Connection1 and Connection2 for this purpose.
+
+2. While an EnergyRouter is a component of an energy manager, it nevertheless becomes necessary to uniquely
+identify every EnergyRouter while, for example, calculating aggregations. Because EnergyRouter is not a
+subclass of FSGIMIdentifiedObject, it does not have the normal object identification attributes. It became
+necessary to use another field (in our case, rdfs:label) to hold a unique name for each EnergyRouter.
+
+3. The model has no way of distinguishing a “managed” load from an “unmanaged” or “plug” load. In the User
+Guide, unmanaged loads in the example (Section 4.5.1) are simply named “Unmanaged1” and “Unmanaged2”. In
+the example, the demand values of these loads are not used in aggregation calculations, the reasoning being that
+the values would not be known. The problem is that other than the naming convention adopted in the example,
+there is no attribute that distinguishes these loads from loads where the demand is known. For now, the
+workaround for correctly calculating aggregated demands is simply to set the Load.actualDemand value to zero so
+that it does not contribute to the aggregation calculations. Any upstream meter reading will of course reflect the
+real demand drawn by such loads, along with the “managed” loads.
+
+This situation was created because the committee decided it would be too cumbersome to explicitly model every
+managed load (i.e. a load for which the demand is known) as a combination of a meter and a load housed in a
+single device. However, this would be the way to avoid any confusion, and there would be no need to distinguish
+“managed” and “unmanaged” loads. An unmanaged load would simply be one without a meter in front of it.
+Using the model in this way, there would be no need for the Load.actualDemand attribute, since all knowledge of
+actual demand would come from a Meter and never from the Load itself.
+
+A small number of manual definitions are also supplied in this file, such as explicitly named
+composition associations from EnergyRouter to RouterConnectionPoint. """ ;
+  owl:versionInfo "Created with TopBraid Composer" ;
 .
 <http://topbraid.org/temp#Documentr-1-0>
   cmof:hasPackagedElement <http://topbraid.org/temp#Documentr-1-0-1> ;
@@ -17766,6 +17807,42 @@ energyrouter---energy_manager_component:EnergyRouter
   rdfs:subClassOf owl:Thing ;
   sh:property energyrouter---energy_manager_component:EnergyRouter-energyrouter---energy_manager_component_hasAggregationRulesetRef ;
   sh:property energyrouter---energy_manager_component:EnergyRouter-energyrouter---energy_manager_component_hasConnectionRef ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path energyrouter---energy_manager_component:hasConnection0Ref ;
+      sh:class energyrouter---energy_manager_component:RouterConnectionPoint ;
+      sh:maxCount 1 ;
+      sh:minCount 1 ;
+      sh:name "has connection0Ref" ;
+      sh:nodeKind sh:IRI ;
+    ] ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path energyrouter---energy_manager_component:hasConnection1Ref ;
+      sh:class energyrouter---energy_manager_component:RouterConnectionPoint ;
+      sh:maxCount 1 ;
+      sh:minCount 1 ;
+      sh:name "has connection1Ref" ;
+      sh:nodeKind sh:IRI ;
+    ] ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path energyrouter---energy_manager_component:hasConnection2Ref ;
+      sh:class energyrouter---energy_manager_component:RouterConnectionPoint ;
+      sh:maxCount 1 ;
+      sh:minCount 1 ;
+      sh:name "has connection2Ref" ;
+      sh:nodeKind sh:IRI ;
+    ] ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path other_common_classes---common_primitive_types_classes_and_enumerations:hasPartOfRef ;
+      sh:class energy_manager_component---device_and_model_components:EM ;
+      sh:maxCount 1 ;
+      sh:minCount 1 ;
+      sh:name "has part of ref" ;
+      sh:nodeKind sh:IRI ;
+    ] ;
 .
 energyrouter---energy_manager_component:EnergyRouter-energyrouter---energy_manager_component_hasAggregationRulesetRef
   a sh:PropertyShape ;
@@ -17849,6 +17926,15 @@ energyrouter---energy_manager_component:RouterConnectionPoint
   sh:property energyrouter---energy_manager_component:RouterConnectionPoint-energyrouter---energy_manager_component_hasMayBeInput ;
   sh:property energyrouter---energy_manager_component:RouterConnectionPoint-energyrouter---energy_manager_component_hasMayBeOutput ;
   sh:property energyrouter---energy_manager_component:RouterConnectionPoint-energyrouter---energy_manager_component_hasPresentStateRef ;
+  sh:property [
+      a sh:PropertyShape ;
+      sh:path other_common_classes---common_primitive_types_classes_and_enumerations:hasPartOfRef ;
+      sh:class energyrouter---energy_manager_component:EnergyRouter ;
+      sh:maxCount 1 ;
+      sh:minCount 1 ;
+      sh:name "has part of ref" ;
+      sh:nodeKind sh:IRI ;
+    ] ;
 .
 energyrouter---energy_manager_component:RouterConnectionPoint-energyrouter---energy_manager_component_hasMayBeBidirectional
   a sh:PropertyShape ;
@@ -17962,6 +18048,21 @@ energyrouter---energy_manager_component:hasAggregationRulesetRef
   a owl:ObjectProperty ;
   <http://uml.topquadrant.com/owl/uml/smg/uml2owl#belongsToGeneratedPackage> <http://topbraid.org/temp#Documentr-1-0-0-21-76> ;
   rdfs:label "aggregationRuleset" ;
+.
+energyrouter---energy_manager_component:hasConnection0Ref
+  a owl:ObjectProperty ;
+  <http://uml.topquadrant.com/owl/uml/smg/uml2owl#belongsToGeneratedPackage> <http://topbraid.org/temp#Documentr-1-0-0-21-76> ;
+  rdfs:label "connection" ;
+.
+energyrouter---energy_manager_component:hasConnection1Ref
+  a owl:ObjectProperty ;
+  <http://uml.topquadrant.com/owl/uml/smg/uml2owl#belongsToGeneratedPackage> <http://topbraid.org/temp#Documentr-1-0-0-21-76> ;
+  rdfs:label "connection" ;
+.
+energyrouter---energy_manager_component:hasConnection2Ref
+  a owl:ObjectProperty ;
+  <http://uml.topquadrant.com/owl/uml/smg/uml2owl#belongsToGeneratedPackage> <http://topbraid.org/temp#Documentr-1-0-0-21-76> ;
+  rdfs:label "connection" ;
 .
 energyrouter---energy_manager_component:hasConnectionRef
   a owl:ObjectProperty ;
@@ -21096,6 +21197,8 @@ generator_component---device_and_model_components:Generator-generator_component-
   a sh:PropertyShape ;
   sh:path generator_component---device_and_model_components:hasOutputRef ;
   sh:class other_common_classes---common_primitive_types_classes_and_enumerations:ConnectionPoint ;
+  sh:maxCount 1 ;
+  sh:minCount 1 ;
 .
 generator_component---device_and_model_components:Generator-generator_component---device_and_model_components_hasRatedStoredEnergyRef
   a sh:PropertyShape ;
@@ -23885,6 +23988,8 @@ load_component---device_and_model_components:Load-load_component---device_and_mo
   a sh:PropertyShape ;
   sh:path load_component---device_and_model_components:hasInputRef ;
   sh:class other_common_classes---common_primitive_types_classes_and_enumerations:ConnectionPoint ;
+  sh:maxCount 1 ;
+  sh:minCount 1 ;
 .
 load_component---device_and_model_components:Load-load_component---device_and_model_components_hasLocked
   a sh:PropertyShape ;
@@ -26479,6 +26584,8 @@ measurements---common_primitive_types_classes_and_enumerations:Measurement-energ
   a sh:PropertyShape ;
   sh:path energy_manager_component---device_and_model_components:hasMeasuredAtRef ;
   sh:class energy_manager_component---device_and_model_components:EMUsagePoint ;
+  sh:maxCount 1 ;
+  sh:minCount 1 ;
 .
 measurements---common_primitive_types_classes_and_enumerations:Measurement-measurements---common_primitive_types_classes_and_enumerations_hasTimeReferenceRef
   a sh:PropertyShape ;
@@ -27078,6 +27185,8 @@ meter_component---device_and_model_components:ElectricMeter-meter_component---de
   a sh:PropertyShape ;
   sh:path meter_component---device_and_model_components:hasInputRef ;
   sh:class other_common_classes---common_primitive_types_classes_and_enumerations:ConnectionPoint ;
+  sh:maxCount 1 ;
+  sh:minCount 1 ;
 .
 meter_component---device_and_model_components:ElectricMeter-meter_component---device_and_model_components_hasIntervalEnergyReadingRef
   a sh:PropertyShape ;
@@ -27090,6 +27199,8 @@ meter_component---device_and_model_components:ElectricMeter-meter_component---de
   a sh:PropertyShape ;
   sh:path meter_component---device_and_model_components:hasOutputRef ;
   sh:class other_common_classes---common_primitive_types_classes_and_enumerations:ConnectionPoint ;
+  sh:maxCount 1 ;
+  sh:minCount 1 ;
 .
 meter_component---device_and_model_components:ElectricMeter-meter_component---device_and_model_components_hasPowerQualityRef
   a sh:PropertyShape ;
@@ -31484,6 +31595,10 @@ other_common_classes---common_primitive_types_classes_and_enumerations:hasDesire
   <http://uml.topquadrant.com/owl/uml/smg/uml2owl#belongsToGeneratedPackage> <http://topbraid.org/temp#Documentr-1-0-1-4> ;
   rdfs:label "has DesiredFractionOfFullRatedOutputEnd" ;
 .
+other_common_classes---common_primitive_types_classes_and_enumerations:hasPartOfRef
+  a owl:ObjectProperty ;
+  rdfs:label "hasPartOfRef" ;
+.
 other_common_classes---common_primitive_types_classes_and_enumerations:hasQuantity
   a owl:DatatypeProperty ;
   <http://uml.topquadrant.com/owl/uml/smg/uml2owl#belongsToGeneratedPackage> <http://topbraid.org/temp#Documentr-1-0-1-4> ;
@@ -31815,11 +31930,15 @@ power_measurements---measurements:PowerMeasurementsSet-power_measurements---meas
   a sh:PropertyShape ;
   sh:path power_measurements---measurements:hasQuantityReactivePowerRef ;
   sh:class power_measurements---measurements:PowerReactiveQuantity ;
+  sh:maxCount 1 ;
+  sh:minCount 1 ;
 .
 power_measurements---measurements:PowerMeasurementsSet-power_measurements---measurements_hasQuantityRealPowerRef
   a sh:PropertyShape ;
   sh:path power_measurements---measurements:hasQuantityRealPowerRef ;
   sh:class power_measurements---measurements:PowerRealQuantity ;
+  sh:maxCount 1 ;
+  sh:minCount 1 ;
 .
 power_measurements---measurements:PowerQuantityType
   a owl:Class ;
@@ -32156,6 +32275,14 @@ primitive_data_types---common_primitive_types_classes_and_enumerations:String
 See http://www.omg.org/spec/UML/20110701/PrimitiveTypes.xmi#String.""" ;
   rdfs:label "String" ;
   rdfs:subClassOf rdfs:Resource ;
+.
+primitive_data_types---common_primitive_types_classes_and_enumerations:false
+  a primitive_data_types---common_primitive_types_classes_and_enumerations:Boolean ;
+  rdfs:label "false" ;
+.
+primitive_data_types---common_primitive_types_classes_and_enumerations:true
+  a primitive_data_types---common_primitive_types_classes_and_enumerations:Boolean ;
+  rdfs:label "true" ;
 .
 <http://uml.linkedmodels.org/sg/schema/fsgim.rofficial/submodels/process---sensorml>
   cmof:hasCMOFbasis <http://topbraid.org/temp#Documentr-1-0-3-2-4-2-0> ;
@@ -36441,6 +36568,74 @@ These modifications were designed to capture the desired subset of functionality
 <http://uml.linkedmodels.org/sg/schema/fsgim/queries>
   rdfs:comment "Empty graph created due to failed import" ;
 .
+queries:ExternalClassQueries
+  spin:query [
+      a sp:Select ;
+      sp:orderBy (
+          [
+            sp:varName "typeLabel" ;
+          ]
+        ) ;
+      sp:resultVariables (
+          [
+            sp:varName "entity" ;
+          ]
+          [
+            sp:varName "typeLabel" ;
+          ]
+        ) ;
+      sp:where (
+          [
+            a sp:TriplePath ;
+            sp:object owl:Thing ;
+            sp:path [
+                a sp:SeqPath ;
+                sp:path1 rdf:type ;
+                sp:path2 [
+                    a sp:ModPath ;
+                    sp:modMax -2 ;
+                    sp:modMin 0 ;
+                    sp:subPath rdfs:subClassOf ;
+                  ] ;
+              ] ;
+            sp:subject [
+                sp:varName "entity" ;
+              ] ;
+          ]
+          [
+            sp:object [
+                sp:varName "type" ;
+              ] ;
+            sp:predicate rdf:type ;
+            sp:subject [
+                sp:varName "entity" ;
+              ] ;
+          ]
+          [
+            sp:object [
+                sp:varName "typeLabel" ;
+              ] ;
+            sp:predicate rdfs:label ;
+            sp:subject [
+                sp:varName "type" ;
+              ] ;
+          ]
+          [
+            a sp:Filter ;
+            sp:expression [
+                a sp:not ;
+                sp:arg1 [
+                    a swa:isImportedResource ;
+                    sp:arg1 [
+                        sp:varName "entity" ;
+                      ] ;
+                  ] ;
+              ] ;
+          ]
+        ) ;
+      rdfs:comment "List all instances of FSGIM entities" ;
+    ] ;
+.
 cmof:PackagedPackage
   a owl:Class ;
   a sh:NodeShape ;
@@ -36500,6 +36695,14 @@ rdfs:Container
 .
 rdfs:Literal
   rdfs:subClassOf rdfs:Resource ;
+.
+<http://www.w3.org/2001/XMLSchema#:false>
+  a primitive_data_types---common_primitive_types_classes_and_enumerations:Boolean ;
+  rdfs:label "false" ;
+.
+<http://www.w3.org/2001/XMLSchema#:true>
+  a primitive_data_types---common_primitive_types_classes_and_enumerations:Boolean ;
+  rdfs:label "true" ;
 .
 xsd:ENTITY
   rdfs:subClassOf rdfs:Resource ;
